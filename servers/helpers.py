@@ -8,6 +8,7 @@ import logging
 from functools import wraps
 from io import BytesIO
 from typing import Optional, Tuple
+from urllib.parse import urlparse, unquote
 
 import requests
 from starlette.requests import Request
@@ -185,3 +186,16 @@ def infer_extension_from_content_type(content_type: Optional[str]) -> str:
 
     ct = content_type.lower().split(";")[0].strip()
     return CONTENT_TYPE_MAPPING.get(ct, ".jpg")
+
+
+def get_filename_from_url(url: str) -> str:
+    """
+    Extracts the filename from a given URL.
+    Handles URLs with query strings or URL-encoded characters.
+    """
+    parsed = urlparse(url)
+    path = parsed.path
+    filename = unquote(os.path.basename(path))  # e.g. "photo (1).jpg"
+    # split into ("photo (1)", ".jpg")
+    name, _ = os.path.splitext(filename)
+    return name

@@ -285,6 +285,19 @@ wheels = [
 ]
 
 [[package]]
+name = "fal-client"
+version = "0.8.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "httpx-sse" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/5c/62/6ddf0e206127975490d2f0bdb7c3371d6a338ad755caf700f3ad18215551/fal_client-0.8.0.tar.gz", hash = "sha256:86f521e0dfeff26e5fd6b92bdfaec1503e016f58789ee8e0c0c5298a6006ccf2", size = 14769, upload-time = "2025-09-30T22:41:29.3Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2f/e7/1cc6e54c105310246f6c8d9e1199c5e7b06a255af164c438449617618e89/fal_client-0.8.0-py3-none-any.whl", hash = "sha256:f2fd9801a7b67b075e388f845065c1f2969f477267233311d34cd07039cab77d", size = 10814, upload-time = "2025-09-30T22:41:28.081Z" },
+]
+
+[[package]]
 name = "fastmcp"
 version = "2.12.4"
 source = { registry = "https://pypi.org/simple" }
@@ -311,6 +324,7 @@ name = "funmcp"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "fal-client" },
     { name = "fastmcp" },
     { name = "google-generativeai" },
     { name = "pillow" },
@@ -318,6 +332,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "fal-client", specifier = ">=0.8.0" },
     { name = "fastmcp", specifier = ">=2.12.4" },
     { name = "google-generativeai", specifier = ">=0.8.5" },
     { name = "pillow", specifier = ">=11.3.0" },
