@@ -12,8 +12,8 @@ from fastmcp import FastMCP
 from PIL import UnidentifiedImageError
 
 # --- Import from shared modules ---
-from ..config import GEMINI_API_KEY, AI_HTTP_TIMEOUT
-from ..helpers import (
+from config import GEMINI_API_KEY, AI_HTTP_TIMEOUT
+from helpers import (
     require_auth,
     upload_to_s3,
     infer_extension_from_content_type,
