@@ -2,6 +2,7 @@
 """
 Common helper functions for MCP servers, including authentication and S3 upload.
 """
+import os
 import json
 import logging
 from functools import wraps
