@@ -1,0 +1,54 @@
+service_account.json
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+env/
+.venv/
+ENV/
+env.bak/
+venv/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Logs and debug
+*.log
+*.out
+*.err
+
+# FastAPI/uvicorn specific
+*.pid
+
+# VSCode/JetBrains configs
+.vscode/
+.idea/
+
+# dotenv + Supabase secrets
+.env
+.env.local
+.supabase/
+.supabase/functions/.env
+
+# Cache
+.cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+
+# PyInstaller
+*.spec
+build/
+dist/
+
+# Coverage reports
+htmlcov/
+
+# SQLite (if used)
+*.sqlite3
+
+# Node modules (if React is in same repo)
+node_modules/
