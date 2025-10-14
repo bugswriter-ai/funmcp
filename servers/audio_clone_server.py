@@ -15,7 +15,6 @@ from typing import Optional, Tuple
 
 import requests
 from fastmcp import FastMCP
-from PIL import Image, UnidentifiedImageError
 import fal_client
 import os
 import time
@@ -39,12 +38,12 @@ mcp = FastMCP(
 
 class FalAudioClone:
     """
-    A class to handle photo restoration using fal.ai API
+    A class to handle clone audio using fal.ai API
     """
 
     def __init__(self, api_key: Optional[str] = None):
         """
-        Initialize the Fal Photo Restoration client
+        Initialize the Fal Audio Clone client
 
         Args:
             api_key: Your fal.ai API key. If not provided, will use FAL_KEY env variable
@@ -61,19 +60,23 @@ class FalAudioClone:
         prompt: str,
     ) -> str:
         """
-        Submit a photo restoration request asynchronously
+    Submit an asynchronous audio cloning request.
 
-        Args:
-            image_url: URL of the old or damaged photo to restore
-            enhance_resolution: Whether to enhance the resolution (default: True)
-            fix_colors: Whether to fix colors (default: True)
-            remove_scratches: Whether to remove scratches (default: True)
-            aspect_ratio: Aspect ratio for 4K output (e.g., "4:3", "16:9", "1:1", "9:16", "3:4")
-            webhook_url: Optional webhook URL to receive results
+    This method generates a new audio clip that mimics the voice and style of the 
+    provided sample audio while speaking the given prompt as the transcript. The 
+    request is processed asynchronously, and a unique request ID is returned to 
+    track the generation job.
 
-        Returns:
-            Request ID for tracking the job
-        """
+    Args:
+        sample_audio_url (str): URL of the reference audio sample whose voice characteristics 
+            (tone, accent, pitch, style) will be cloned.
+        prompt (str): Text content that should be spoken in the generated audio, using 
+            the cloned voice from the sample.
+
+    Returns:
+        str: A unique request ID that can be used to check the status of the job and 
+        retrieve the generated audio once processing is complete.
+    """
         # Prepare input parameters
         input_data = {
             "reference_audio_url": audio_url,
@@ -95,7 +98,7 @@ class FalAudioClone:
         Check the status of an async request
 
         Args:
-            request_id: The request ID returned from restore_photo_async
+            request_id: The request ID returned from clone_audio_async
 
         Returns:
             Status information dictionary
@@ -112,10 +115,10 @@ class FalAudioClone:
         Get the result of an async request
 
         Args:
-            request_id: The request ID returned from restore_photo_async
+            request_id: The request ID returned from clone_audio_async 
 
         Returns:
-            Result dictionary with restored image URL
+            Result dictionary with generated audio URL
         """
         result = fal_client.result(
             "fal-ai/zonos", request_id=request_id
@@ -133,7 +136,7 @@ class FalAudioClone:
             poll_interval: Seconds between status checks (default: 2)
 
         Returns:
-            Result dictionary with restored image URL
+            Result dictionary with generated audio URL
         """
         print(f"Waiting for request {request_id} to complete...")
 
@@ -162,18 +165,18 @@ class FalAudioClone:
     @staticmethod
     def extract_output_url(result: Dict[str, Any]) -> Tuple[str, str]:
         """
-        Extract the restored image URL from the result
+        Extract the generated audio URL from the result
 
         Args:
             result: Result dictionary from the API
 
         Returns:
-            URL of the restored image
+            Tuple[str, str] : URL of the generated audio, and content_type 
         """
         try:
             return result['audio']['url'], result["audio"]['content_type']
         except (KeyError, IndexError) as e:
-            raise ValueError(f"Could not extract image URL from result: {e}")
+            raise ValueError(f"Could not extract audio URL from result: {e}")
 
 
 client = FalAudioClone()
@@ -183,19 +186,21 @@ client = FalAudioClone()
 @require_auth
 async def clone_audio(audio_url: str, prompt: str, auth_token: str = None) -> str:
     """
-    Downloads an image from a URL, and uses Nano Banana (Gemini) with prompt engineering to restore it.
+    Generates a new audio clip by cloning the voice from a given sample audio and speaking the provided prompt.
+
+    This method downloads the reference audio from the given URL, analyzes its voice characteristics 
+    (tone, pitch, accent, style), and then uses them to generate a new audio clip where the prompt 
+    text is spoken in the cloned voice.
 
     Args:
-        image_url: The URL of the old or torn image to be restored.
-        user_prompt: An optional user-provided description of the damage or desired outcome.
-        auth_token: The bearer token for authentication (injected by the decorator).
+        audio_url (str): URL of the reference audio sample whose voice will be cloned.
+        prompt (str): Text content to be spoken in the generated audio using the cloned voice.
+        auth_token (str, optional): Bearer token for authentication, if required by the API.
 
     Returns:
-        A JSON string containing the Data URI of the restored image or an error message.
+        str: A JSON string containing either the generated audio URL or Data URI, or an error message 
+        if the cloning process fails.
     """
-    # if not image_model:
-    # return json.dumps({"error": "Image generation model is not available."})
-
     print("\n" + "=" * 60)
     print("Asynchronous (submit and check later)")
     print(f'Prompt : {prompt}')
@@ -233,5 +238,5 @@ async def clone_audio(audio_url: str, prompt: str, auth_token: str = None) -> st
 
 
 if __name__ == "__main__":
-    logger.info("Starting Revive-AI MCP Server")
+    logger.info("Starting Audio Clone MCP Server")
     mcp.run(transport="streamable-http")
