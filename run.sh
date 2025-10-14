@@ -35,6 +35,6 @@ run_server "grayscale_server.py" 9002
 run_server "ai-upscale.py" 9003
 run_server "audio_clone_server.py" 9004
 run_server "product_photoshoot_server.py" 9005
-run_server "fashion_try.py" 9006
+run_server "try_fashion.py" 9006
 
 echo "[✓] All funmcp servers started successfully."
