@@ -39,6 +39,11 @@ CONTENT_TYPE_MAPPING = {
     "image/bmp": ".bmp",
     "image/tiff": ".tiff",
     "image/gif": ".gif",
+    # 3D models
+    "model/gltf-binary": ".glb",
+    "model/gltf+json": ".gltf",
+    "model/obj": ".obj",
+    "model/stl": ".stl",
 }
 
 # File extension to content type mapping for S3 uploads
@@ -51,6 +56,11 @@ EXT_TO_CONTENT_TYPE = {
     ".tiff": "image/tiff",
     ".tif": "image/tiff",
     ".gif": "image/gif",
+    # 3D models
+    ".glb": "model/gltf-binary",
+    ".gltf": "model/gltf+json",
+    ".obj": "model/obj",
+    ".stl": "model/stl",
 }
 
 
