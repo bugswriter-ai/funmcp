@@ -44,6 +44,27 @@ CONTENT_TYPE_MAPPING = {
     "model/gltf+json": ".gltf",
     "model/obj": ".obj",
     "model/stl": ".stl",
+    # Video (standardized)
+    "video/mp4": ".mp4",
+    "video/webm": ".webm",
+    "video/ogg": ".ogv",
+    "video/quicktime": ".mov",
+    "video/x-matroska": ".mkv",
+    "video/x-msvideo": ".avi",
+    "video/mpeg": ".mpg",
+    "video/x-flv": ".flv",
+    "video/x-ms-wmv": ".wmv",
+    # Audio (common)
+    "audio/mpeg": ".mp3",
+    "audio/mp3": ".mp3",
+    "audio/wav": ".wav",
+    "audio/x-wav": ".wav",
+    "audio/ogg": ".ogg",
+    "audio/webm": ".webm",
+    "audio/flac": ".flac",
+    "audio/aac": ".aac",
+    "audio/mp4": ".m4a",
+    "audio/x-m4a": ".m4a",
 }
 
 # File extension to content type mapping for S3 uploads
@@ -61,6 +82,23 @@ EXT_TO_CONTENT_TYPE = {
     ".gltf": "model/gltf+json",
     ".obj": "model/obj",
     ".stl": "model/stl",
+    # Video (standardized)
+    ".mp4": "video/mp4",
+    ".webm": "video/webm",
+    ".ogv": "video/ogg",
+    ".mov": "video/quicktime",
+    ".mkv": "video/x-matroska",
+    ".avi": "video/x-msvideo",
+    ".mpg": "video/mpeg",
+    ".flv": "video/x-flv",
+    ".wmv": "video/x-ms-wmv",
+    # Audio (common)
+    ".mp3": "audio/mpeg",
+    ".wav": "audio/wav",
+    ".ogg": "audio/ogg",
+    ".flac": "audio/flac",
+    ".aac": "audio/aac",
+    ".m4a": "audio/mp4",
 }
 
 
@@ -179,6 +217,7 @@ def upload_to_s3(file_bytes: bytes, filename: str, auth_token: str) -> Tuple[str
     logger.info(f"Upload successful: {s3_key} ({file_size} bytes)")
 
     return s3_key, file_size
+
 
 def infer_extension_from_content_type(content_type: Optional[str]) -> str:
     """
