@@ -81,19 +81,32 @@ def generate_3d_with_fal(prompt: str) -> str:
 
     logger.info(f"Fal AI result received: {json.dumps(result, indent=2)}")
 
-    # Try common shapes of result structures
-    # 1) {"model": {"url": "..."}}
-    model_dict = result.get("model") if isinstance(result, dict) else None
-    if isinstance(model_dict, dict) and model_dict.get("url"):
+    if not isinstance(result, dict):
+        raise RuntimeError(f"Unexpected result type: {type(result)}")
+
+    # Prefer explicit GLB URL if present
+    model_glb = result.get("model_glb")
+    if isinstance(model_glb, dict) and isinstance(model_glb.get("url"), str):
+        return model_glb["url"]
+
+    # Check nested model_urls by preference order
+    model_urls = result.get("model_urls")
+    if isinstance(model_urls, dict):
+        for key in ["glb", "gltf", "usdz", "obj", "fbx"]:
+            entry = model_urls.get(key)
+            if isinstance(entry, dict) and isinstance(entry.get("url"), str):
+                return entry["url"]
+
+    # Other common shapes we previously handled
+    model_dict = result.get("model")
+    if isinstance(model_dict, dict) and isinstance(model_dict.get("url"), str):
         return model_dict["url"]
 
-    # 2) {"asset": {"url": "..."}}
-    asset_dict = result.get("asset") if isinstance(result, dict) else None
-    if isinstance(asset_dict, dict) and asset_dict.get("url"):
+    asset_dict = result.get("asset")
+    if isinstance(asset_dict, dict) and isinstance(asset_dict.get("url"), str):
         return asset_dict["url"]
 
-    # 3) Legacy/images-like: not expected for 3D, but be defensive
-    url_candidate = result.get("url") if isinstance(result, dict) else None
+    url_candidate = result.get("url")
     if isinstance(url_candidate, str) and url_candidate.startswith("http"):
         return url_candidate
 
