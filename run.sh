@@ -1,4 +1,40 @@
-#!/bin/sh
+#!/bin/bash
+set -e
 
-setsid uv run fastmcp run servers/old_image_reviver.py:mcp --transport http --port 9001 &
-setsid uv run fastmcp run servers/grayscale_server.py:mcp --transport http --port 9002 &
+# --- Configuration ---
+BASE_DIR="$HOME/funmcp"
+LOG_DIR="$BASE_DIR/logs"
+VENV_BIN="$BASE_DIR/.venv/bin"
+FASTMCP="$VENV_BIN/fastmcp"
+
+# --- Ensure log directory exists ---
+mkdir -p "$LOG_DIR"
+
+echo "[+] Stopping any existing funmcp servers..."
+# Kill all running fastmcp processes under funmcp
+pkill -f "$FASTMCP" || true
+sleep 2
+
+echo "[+] Starting funmcp servers..."
+
+run_server() {
+    local script="$1"
+    local port="$2"
+    local name
+    name=$(basename "$script" .py)
+
+    echo "  → Starting $name on port $port"
+    setsid "$VENV_BIN/python3" "$FASTMCP" run "servers/$script:mcp" \
+        --transport http --port "$port" \
+        >"$LOG_DIR/${name}.log" 2>&1 &
+}
+
+# Start all servers
+run_server "old_image_reviver.py" 9001
+run_server "grayscale_server.py" 9002
+run_server "ai-upscale.py" 9003
+run_server "audio_clone_server.py" 9004
+run_server "product_photoshoot_server.py" 9005
+run_server "try_fashion.py" 9006
+
+echo "[✓] All funmcp servers started successfully."
