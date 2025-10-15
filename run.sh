@@ -37,5 +37,8 @@ run_server "audio_clone_server.py" 9004
 run_server "product_photoshoot_server.py" 9005
 run_server "try_fashion.py" 9006
 run_server "meshy_text_to_3d_server.py" 9007
+run_server "background_replace_server.py" 9008
+run_server "video_background_removal_server.py" 9009
+run_server "genfill_server.py" 9010
 
 echo "[✓] All funmcp servers started successfully."
