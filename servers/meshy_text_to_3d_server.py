@@ -116,6 +116,13 @@ async def generate_text_to_3d(prompt: str, auth_token: Optional[str] = None) -> 
     """
     Generates a 3D model from a text prompt using fal-ai meshy model, uploads
     the resulting asset to S3, and returns JSON with the S3 key.
+    
+    Args:
+        prompt: The text prompt to generate a 3D model from.
+        auth_token: The authentication token for the request.
+    
+    Returns:
+        A JSON object with the S3 key of the generated 3D model.
     """
     logger.info("=" * 60)
     logger.info("Tool 'generate_text_to_3d' called.")
