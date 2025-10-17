@@ -14,6 +14,7 @@ This folder contains a collection of Model Context Protocol (MCP) micro-servers 
   - `background_replace_server.py` — Replace image background (fal-ai/bria/background/replace)
   - `video_background_removal_server.py` — Remove video background (fal-ai/bria/video/background-removal)
   - `genfill_server.py` — Inpainting (fal-ai/bria/genfill)
+  - `texture_generator_server.py` — AI texture generation from text (fal-ai/fast-sdxl)
 
 ## Requirements
 - Python 3.13+
@@ -68,6 +69,7 @@ Ports (by default in `run.sh`):
 - 9008 `background_replace_server.py`
 - 9009 `video_background_removal_server.py`
 - 9010 `genfill_server.py`
+- 9012 `texture_generator_server.py`
 
 Logs are written to `$HOME/funmcp/logs/` by the script.
 
@@ -150,6 +152,12 @@ Below are the tools exposed by each server and their parameters. All return a JS
   - Tool: `bria_genfill(image_url, mask_url, prompt, num_images?, negative_prompt?, refine_prompt?, seed?, fast?)`
   - Provider: `fal-ai/bria/genfill`
   - Output: Inpainted image uploaded
+
+- texture_generator_server.py
+  - Tool: `generate_texture(prompt, style?, resolution?, seed?)`
+  - Provider: `fal-ai/fast-sdxl`
+  - Inputs: `prompt` (text description), `style` ("seamless"), `resolution` (e.g., "1024x1024"), `seed` (integer)
+  - Output: Generated texture uploaded
 
 ## Development notes
 - Shared logic (`helpers.py`) handles token validation and S3 upload via your backend. It maps content-types to file extensions and infers missing types.
