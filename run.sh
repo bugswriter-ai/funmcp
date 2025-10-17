@@ -40,6 +40,7 @@ run_server "meshy_text_to_3d_server.py" 9007
 run_server "background_replace_server.py" 9008
 run_server "video_background_removal_server.py" 9009
 run_server "genfill_server.py" 9010
-run_server "fake_progress.py" 9011
+run_server "texture_generator_server.py" 9012
+run_server "fake_progress.py" 9013
 
 echo "[✓] All funmcp servers started successfully."
